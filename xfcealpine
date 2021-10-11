@@ -1,0 +1,334 @@
+Xfce Setup
+
+From Alpine Linux
+(Redirected from XFCE Setup)
+Jump to: navigation, search
+
+
+                   
+                   
+                   
+                   
+                   
+                   
+[300px-XFCEScreens]
+ 
+Xfce screenshot.
+
+Contents
+
+  • 1 Prerequisites
+  • 2 Basic Xfce desktop installation
+  • 3 Starting Xfce
+      □ 3.1 With a display manager (graphical login)
+      □ 3.2 From the command line
+  • 4 Localized keyboard layout
+  • 5 Allowing shut down and reboot
+  • 6 Auto-mounting USB drives
+  • 7 Network browsing
+  • 8 Desktop Applications
+  • 9 Theme installation (optional)
+  • 10 Troubleshooting
+      □ 10.1 Startup
+      □ 10.2 Login
+      □ 10.3 Session
+  • 11 Related
+
+Prerequisites
+
+  • Alpine Installation
+  • Create user accounts
+  • Graphical base environment
+  • Enabled "community" repository
+
+
+Basic Xfce desktop installation
+
+Typical minimal package selection to install:
+
+# apk add xfce4 xfce4-terminal xfce4-screensaver lightdm-gtk-greeter
+
+Note:
+
+xfce4-screensaver may also be necessary just for screen locking after inactivity
+(with no screensaver enabled).
+lightdm-gtk-greeter may be omitted if Xfce should only be started from or after a
+command line login, i.e. the machine should not boot to a graphical login screen
+(display manager). However, it is then necessary to add some theme files instead, to
+get a proper (themed) appearance. The theme that would otherwise be included by
+default may be added with adwaita-gtk2-theme adwaita-icon-theme.
+
+Starting dbus (desktop bus) service:
+
+# rc-service dbus start
+
+Enabling dbus to start on boot:
+
+# rc-update add dbus
+
+If dbus is not running it leads to issues like missing icons and keyboard shortcuts.
+
+Starting Xfce
+
+With a display manager (graphical login)
+
+If the package lightdm-gtk-greeter has been installed per the instructions above,
+the lightdm display manager may be started to log in graphically with your new user.
+
+# rc-service lightdm start
+
+After correct operation is verified, lightdm can be enabled to start up during boot:
+
+# rc-update add lightdm
+
+From the command line
+
+Xfce may be started with:
+
+startx
+
+If you want to start it via another script or mechanism like xinit, use startxfce4.
+e.g. call it via "exec startxfce4" at the end of the ~/.xinitrc configuration file.
+
+Localized keyboard layout
+
+
+Settings->Keyboard->Layout->"Keyboard layout" seems to get activated only after once
+temporarily switching on the "Use system defaults" button, logging out and in again,
+and then turning it off.
+
+Allowing shut down and reboot
+
+To enable users to shut down the machine or reboot, the packages elogind and 
+polkit-elogind need to be installed.
+
+# apk add elogind polkit-elogind
+
+A reboot is required to let it take effect.
+
+lbu commit # if running in diskless mode, to save state reboot
+
+Auto-mounting USB drives
+
+To enable automatic mounting of USB drives, install these packages:
+
+# apk add gvfs udisks2
+
+Depending on what devices you intend to mount, some additional packages may be
+needed:
+
+ntfs-3g NTFS support gvfs-cdda audio CDs gvfs-mtp media players and mobile devices
+that use MTP gvfs-gphoto2 digital cameras and mobile devices that use PTP gvfs-afc
+Apple mobile devices
+
+To list descriptions of all gvfs- packages:
+
+apk info -d gvfs-*
+
+
+Make sure that mounting is enabled in
+
+Thunar>Edit>Preferences>Advanced>Volume Management>Configure>Storage>Removable
+Storage
+
+Network browsing
+
+For browsing of network shares within XFCE that works seamlessly with file
+associations, you can install the gvfs packages for the network protocols you use.
+
+For example, to browse in a SMB/cifs windows network:
+
+# apk add gvfs-smb
+
+(Check: If the above may already be sufficient for gvfs to initiate the fuse kernel
+module. Else, try to identify if there are necessary steps in:)
+
+# apk add gvfs-fuse
+
+The OpenRC script for fuse is in a separate package.
+
+# apk add fuse-openrc
+
+Then the fuse service can be started manually.
+
+# rc-service fuse start
+
+(The XFCE sessions already in progress need to be restarted for this to take effect,
+i.e. log out and log in again.)
+
+If it works, the fuse service can be added to start up automatically at boot time:
+
+# rc-update add fuse
+
+Desktop Applications
+
+Completing the Xfce setup usually encompasses installing a number of desktop
+applications.
+
+Some applications that should fit well for a light-weight Xfce desktop may be found
+at Xfce_Desktop.
+
+Theme installation (optional)
+
+All this is optional.
+
+Example of installing and enabling a different theme.
+
+  • apk add paper-gtk-theme # gtk2 !?
+  • change xfce4 style/icons to paper: Settings -> Appearance -> Style and Icons
+  • change window manager theme to Paper: Settings -> Window Manager -> Style
+  • set custom desktop background picture, to see the transparency effects
+  • Settings - > Appearance -> Fonts: Turn on Anti-aliasing (is the default) and
+    enable Sub-Pixel order -> RGB
+
+
+Example of changing to another icon theme.
+
+  • apk add paper-icon-theme # ~125MB
+  • Change mouse Theme to Paper: Settings -> Mouse and Trackpad -> Theme
+  • enable all Composer Shadows: Settings -> Window Manager Tweaks -> Composer
+
+
+Example of changing to another font, e.g. the international font Noto.
+
+  • apk add font-noto
+  • Settings - > Appearance -> Fonts: Set to Noto Sans UI
+
+Troubleshooting
+
+Startup
+
+If the Xorg server segfaults in kvm/qemu then add nomodeset as a boot option.
+
+
+If the mouse / keyboard is not responding, you can try disabling hotplug.
+
+  Section "ServerFlags"
+    Option "AutoAddDevices" "False"
+  EndSection
+
+Login
+
+If you are unable to login, check /var/log/lightdm/lightdm.log, there may be output
+there from X to indicate failed modules, etc.
+
+If you are unable to login, or you see an error "Failed to execute login command",
+you should check ~/.xinitrc (if you're using .xinitrc) with your preferred text
+editor (vi, nano, etc) and ensure that it is set to load xfce. To do this, the
+'exec' line (usually the last line in the file) should read "exec startxfce4". If ~
+/.xinitrc does not exist, create it and add the exec line. this command will do it:
+
+$ echo "exec startxfce4" >> ~/.xinitrc
+
+Session
+
+If the panel and windows disappear or start flickering after logging in to xfce the
+first time, log out, and then log in again. That happens because xfce is writing a
+default config file with the compositor enabled, but does not enable it during your
+first login. Clear out the ~/.config/xfce directory, and login as "first time"
+again, as the default vblank setting for the compositor is likely incorrect. Open
+the windows manager tweaks and dconf editor (or use dconf-query) before you log out.
+Tick the compositor to off in the window manager tweaks ui. If you have a recent
+enough xfce (4.14) there is a ui in window manager tweaks to set syncing mode, and
+you can try different values, such as vblank, xpresent, and glx, while turning the
+compositor on and off, until you find one that works. Or, from dconf editor, you can
+set xfwm4 /general/vblank_mode, which you will find is set to "auto" by default, and
+then turn the compositor on again. This can also be accomplished from the command
+line using using:
+
+xfconf-query -c xfwm4 -p /general/vblank_mode -s mode
+
+where mode is vblank, glx or xpresent.
+
+You have to use xfconf-query from within the xfce terminal session, or at least with
+the xfce settings daemon started.
+
+Related
+
+  • Some notes of older custom configurations: Desktop-notes
+
+  • Install X-Window in Alpine Linux Joachim Nilsson 2017
+
+Retrieved from "http://wiki.alpinelinux.org/w/index.php?title=Xfce_Setup&oldid=20098
+"
+Category:
+
+  • Xfce
+
+Navigation menu
+
+Personal tools
+
+  • Create account
+  • Log in
+
+Namespaces
+
+  • Page
+  • Discussion
+
+[ ]
+
+Variants
+
+Views
+
+  • Read
+  • View source
+  • View history
+
+[ ]
+
+More
+
+Search
+
+[                    ][Search][Go]
+ 
+
+Welcome
+
+  • Installation
+  • FAQ
+  • Tutorials and Howtos
+  • Contribute
+  • Developer Documentation
+  • Glossary
+
+Services
+
+  • Main Site
+  • Git Repositories
+  • Bug Tracker
+  • Forums
+  • Mailing Lists
+  • IRC Channels
+  • Downloads
+  • Package Database
+
+Wiki
+
+  • Recent Changes
+  • Site Index
+  • Categories
+  • Help
+  • Maintenance
+
+Toolbox
+
+  • What links here
+  • Related changes
+  • Special pages
+  • Printable version
+  • Permanent link
+  • Page information
+
+  • This page was last edited on 18 August 2021, at 03:37.
+           • © Copyright 2008-2021 Alpine Linux Development Team all rights reserved
+
+  • Privacy policy
+  • About
+  • Disclaimers
+
+  • Powere
+
