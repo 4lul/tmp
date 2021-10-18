@@ -13,3 +13,4 @@ further дальше
 expand расширять
 determine определять
 leading ведущий
+anchor привязка-якорь
