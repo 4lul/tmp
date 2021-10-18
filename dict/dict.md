@@ -25,3 +25,45 @@
 | terminate     |                   | расторгнуть, завершить               |
 | to abuse      |                   | злоупотреблять                       |
 | to bind       |                   | связывать                            |
+| rush               |               | стремление         |
+| bundle             |               | пучок              |
+| convention         |               | соглашение         |
+| maintainability    |               | ремонтность        |
+| clarity            |               | ясность            |
+| consistency        |               | последовательность |
+| foundation         |               | основы             |
+| habits             |               | привычки           |
+| insist             |               | настаивать         |
+| indentation        |               | отступ             |
+| further            |               | дальше             |
+| expand             |               | расширять          |
+| determine          |               | определять         |
+| leading            |               | ведущий            |
+| rush               || стремление         |
+| bundle             || пучок              |
+| convention         || соглашение         |
+| maintainability    || ремонтность        |
+| clarity            || ясность            |
+| consistency        || последовательность |
+| foundation         || основы             |
+| habits             || привычки           |
+| insist             || настаивать         |
+| indentation        || отступ             |
+| further            || дальше             |
+| expand             || расширять          |
+| determine          || определять         |
+| leading            || ведущий            |
+| rush              | стремление         |
+| bundle            | пучок              |
+| convention        | соглашение         |
+| maintainability   | ремонтность        |
+| clarity           | ясность            |
+| consistency       | последовательность |
+| foundation        | основы             |
+| habits            | привычки           |
+| insist            | настаивать         |
+| indentation       | отступ             |
+| further           | дальше             |
+| expand            | расширять          |
+| determine         | определять         |
+| leading           | ведущий            |
