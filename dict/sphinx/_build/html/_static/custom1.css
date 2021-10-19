@@ -1,0 +1,9 @@
+@import '../furo.css';
+.body {
+    font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif;
+    font-size: 17px;
+}
+
+.highlight { background: #EEE; }
+body[data-theme="dark"] .highlight { background: #323740; color: #f8f8f2 }
+body[data-theme="auto"] .highlight { background: #323740; color: #f8f8f2 }

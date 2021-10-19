@@ -3,7 +3,7 @@ while read file event tm; do
     current=$(date +'%H%M%S')
     delta=`expr $current - $tm`
     if [ $delta -lt 2 -a $delta -gt -2 ] ; then
-        sleep 1
+        sleep 2
         make html
     fi
 done
