@@ -1,9 +1,3 @@
-.. toctree::
-
-   sidebar
-   intro
-   index
-
 New wave "..
 ===================
 

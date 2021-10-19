@@ -17,7 +17,7 @@
 # sys.path.insert(0, os.path.abspath('.'))
 # -- Project information -----------------------------------------------------
 
-project = 'First'
+project = 'backpack'
 copyright = '2021, 4lul'
 author = '4lul'
 
@@ -26,6 +26,12 @@ release = '0.0.0'
 
 
 # -- General configuration ---------------------------------------------------
+import docutils.core
+  
+docutils.core.publish_file(
+    source_path ="intro.rst",
+    destination_path ="intro.html",
+    writer_name ="html")
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
@@ -51,27 +57,18 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 html_theme = 'sphinx_celery'
 #'sphinx-rtd-theme'
 
-#html_theme_options = {
-#    'analytics_id': 'G-XXXXXXXXXX',  #  Provided by Google in your dashboard
-#    'analytics_anonymize_ip': False,
-#    'logo_only': False,
-#    'display_version': True,
-#    'prev_next_buttons_location': 'bottom',
-#    'style_external_links': False,
-#    'vcs_pageview_mode': '',
-#    'style_nav_header_background': '#EEE',
-#    # Toc options
-#    'collapse_navigation': True,
-#    'sticky_navigation': True,
-#    'navigation_depth': 4,
-#    'includehidden': True,
-#    'titles_only': False
-#}
-
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 html_css_files = ['custom.css']
 
+html_sidebars = {
+        '**': ['localtoc.html',
+               'relations.html',
+               'sourcelink.html',
+               'searchbox.html'
+            ]
+
+        }
 #html_style = 'css/custom.css'
